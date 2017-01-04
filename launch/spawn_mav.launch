@@ -49,6 +49,6 @@
    args="-param robot_description
          -urdf
          -model $(arg namespace)"
-   respawn="true" output="screen">
+   respawn="false" output="screen">
   </node>
 </launch>

@@ -17,15 +17,50 @@
 
   <!-- Creation of UAV_1 -->
   <xacro:firefly_macro
-    namespace="${namespace}">
+    namespace="${namespace}/firefly_1">
+  </xacro:firefly_macro>
+
+  <!-- Creation of UAV_2 -->
+  <xacro:firefly_macro
+    namespace="${namespace}/firefly_2">
   </xacro:firefly_macro>
 
   <!-- Attaching the cable to UAV_1 -->
-  <xacro:cable_macro
-    robot_namespace="${namespace}"
-    uav_body_frame="${namespace}/base_link"
-    id_number="1">
-  </xacro:cable_macro>
+  <xacro:payload_macro
+    namespace="${namespace}"
+    uav_1_link="${namespace}/firefly_1/base_link"
+    uav_2_link="${namespace}/firefly_2/base_link" >
+  </xacro:payload_macro>
 
+  <!-- Adding odometry sensor to the bar -->
+  <xacro:odometry_plugin_macro
+    namespace="${namespace}/bar"
+    odometry_sensor_suffix="_bar"
+    parent_link="${namespace}/bar"
+    pose_topic="ground_truth/pose"
+    pose_with_covariance_topic="ground_truth/pose_with_covariance"
+    position_topic="ground_truth/position"
+    transform_topic="ground_truth/transform"
+    odometry_topic="ground_truth/odometry"
+    parent_frame_id="world"
+    child_frame_id="${namespace}/bar"
+    mass_odometry_sensor="0.00001"
+    measurement_divisor="1"
+    measurement_delay="0"
+    unknown_delay="0.0"
+    noise_normal_position="0 0 0"
+    noise_normal_quaternion="0 0 0"
+    noise_normal_linear_velocity="0 0 0"
+    noise_normal_angular_velocity="0 0 0"
+    noise_uniform_position="0 0 0"
+    noise_uniform_quaternion="0 0 0"
+    noise_uniform_linear_velocity="0 0 0"
+    noise_uniform_angular_velocity="0 0 0"
+    enable_odometry_map="false"
+    odometry_map=""
+    image_scale="">
+    <inertia ixx="0.00001" ixy="0.0" ixz="0.0" iyy="0.00001" iyz="0.0" izz="0.00001" /> <!-- [kg m^2] [kg m^2] [kg m^2] [kg m^2] [kg m^2] [kg m^2] -->
+    <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0" />
+  </xacro:odometry_plugin_macro>
 
 </robot>
