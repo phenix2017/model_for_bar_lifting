@@ -1,10 +1,6 @@
 <?xml version="1.0"?>
 <!--
-  Author: Massimiliano Pandolfo
-
-  Version 0.7
-  payload_macro now receives two links as input, and acts as root node for the robot tree.
-  With the exception of some minor improvements, this is supposed to be the final version before 1.0.
+  Author:
 -->
 
 <robot xmlns:xacro="http://ros.org/wiki/xacro">
@@ -12,52 +8,13 @@
   <!-- Properties -->
   <xacro:property name="cable_length" value="$(arg cable_length)" /> <!-- [m] -->
   <xacro:property name="cable_radius" value="$(arg cable_radius)" /> <!-- [m] -->
-  <xacro:property name="cable_mass" value="$(arg cable_mass)" /> <!-- [kg] -->
-  <xacro:property name="sphere_radius" value="$(arg cable_radius)" /> <!-- [m] -->
-  <xacro:property name="sphere_mass" value="0.001" /> <!-- [kg] -->
-  <xacro:property name="x_payload" value="$(arg x_payload)"/> <!-- [m] -->
-  <xacro:property name="y_payload" value="$(arg y_payload)"/> <!-- [m] -->
-  <xacro:property name="z_payload" value="$(arg z_payload)"/> <!-- [m] -->
   <xacro:property name="payload_mass" value="$(arg payload_mass)"/> <!-- [kg] -->
 
-  <xacro:property name="bar_length" value="1" /> <!-- [m] -->
-  <xacro:property name="bar_radius" value="0.01" /> <!-- [m] -->
+  <xacro:property name="bar_length" value="$(arg bar_length)" /> <!-- [m] -->
+  <xacro:property name="bar_radius" value="$(arg bar_radius)" /> <!-- [m] -->
 
-
-  <!-- Macro that creates a cuboid -->
-  <xacro:macro name="cuboid_macro" params="x y z mass">
-    <inertial>
-      <origin xyz="0 0 0" rpy="0 0 0"/>
-      <mass value="${mass}"/>
-        <inertia
-        ixx="${mass*(y*y+z*z)/12}" ixy="0.0" ixz="0.0"
-        iyy="${mass*(x*x+z*z)/12}" iyz="0.0"
-        izz="${mass*(y*y+x*x)/12}"/>
-    </inertial>
-    <visual>
-      <geometry>
-        <box size="${x} ${y} ${z}"/>
-      </geometry>
-    </visual>
-  </xacro:macro>
-
-
-  <!-- Macro for the auxiliary spheres -->
-  <xacro:macro name="sphere_macro" params="r mass">
-    <inertial>
-      <origin xyz="0 0 0" rpy="0 0 0"/>
-      <mass value="${mass}"/>
-        <inertia
-        ixx="${0.4 * mass * r * r}" ixy="0.0" ixz="0.0"
-        iyy="${0.4 * mass * r * r}" iyz="0.0"
-        izz="${0.4 * mass * r * r}"/>
-    </inertial>
-    <visual>
-      <geometry>
-        <sphere radius="${r}"/>
-      </geometry>
-    </visual>
-  </xacro:macro>
+  <xacro:property name="bar_anchor_point1" value="$(arg bar_anchor_point1)" /> <!-- [m] -->
+  <xacro:property name="bar_anchor_point2" value="$(arg bar_anchor_point2)" /> <!-- [m] -->
 
 
   <!-- Macro for uav ball joint -->
@@ -181,13 +138,15 @@
     <xacro:bar_ball_joint 
       namespace="${namespace}/bar_anchor_point_1" 
       bar_link="${namespace}/bar" 
-      length="${bar_length/2}">
+      length="${bar_anchor_point1}"> 
+<!--       length="${bar_length/2}"> -->
     </xacro:bar_ball_joint>
 
     <xacro:bar_ball_joint 
       namespace="${namespace}/bar_anchor_point_2" 
       bar_link="${namespace}/bar"
-      length="${-bar_length/2}">
+      length="${bar_anchor_point2}"> 
+      <!-- length="${-bar_length/2}"> -->
     </xacro:bar_ball_joint>
 
 
@@ -213,8 +172,6 @@
       <parent link="${namespace}/bar_anchor_point_2/load_hinge_z" />
       <child link="${uav_2_link}/load_hinge_y" />
     </joint>
-
-
 
   </xacro:macro>
 
