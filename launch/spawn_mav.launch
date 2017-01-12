@@ -58,9 +58,19 @@
          -y $(arg bar_y0)
          -z $(arg bar_z0)
          -R 0
-         -P 0.0
-         -Y 0.2
+         -P 0.1
+         -Y 0.4
+         -J $(arg namespace)/bar_anchor_point_1/bar_hinge_y 0.0
+         -J $(arg namespace)/bar_anchor_point_1/bar_hinge_x 0.0
+         -J $(arg namespace)/firefly_1/base_link/hinge_y 0.0
+         -J $(arg namespace)/firefly_1/base_link/hinge_x 0.0
          -model $(arg namespace)"
    respawn="false" output="screen">
   </node>
+<!--  See effect of each joint
+         -J $(arg namespace)/bar_anchor_point_1/bar_hinge_y 0.3
+         -J $(arg namespace)/bar_anchor_point_1/bar_hinge_x 0.3
+         -J $(arg namespace)/firefly_1/base_link/hinge_y 0.3
+         -J $(arg namespace)/firefly_1/base_link/hinge_x 0.3
+ -->
 </launch>

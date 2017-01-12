@@ -9,7 +9,7 @@
   <arg name="cable_length" default="0.7" /> <!-- [m] -->
   <arg name="cable_radius" default="0.005" /> <!-- [m] -->
 
-  <arg name="payload_mass" default="0.2"/> <!-- [kg] -->
+  <arg name="payload_mass" default="0.4"/> <!-- [kg] -->
 
   <arg name="bar_length" default="1"/> <!-- [m] -->
   <arg name="bar_radius" default="0.02"/> <!-- [m] -->
