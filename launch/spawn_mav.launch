@@ -5,23 +5,28 @@
   <arg name="namespace" default="$(arg model_name)"/>
   <arg name="model" default="$(find collaborative_load_lifting)/urdf/$(arg model_name)_base.xacro"/>
   <arg name="tf_prefix" default="$(optenv ROS_NAMESPACE)"/>
-  <arg name="x" default="0.0"/>
-  <arg name="y" default="0.0"/>
-  <arg name="z" default="0.1"/>
+
   <arg name="enable_logging" default="false"/>
   <arg name="enable_ground_truth" default="true"/>
   <arg name="log_file" default="$(arg model_name)"/>
   <arg name="wait_to_record_bag" default="false"/>
   <arg name="enable_mavlink_interface" default="false"/>
+
+  <arg name="bar_x0" default="0.0"/> <!-- [m] -->
+  <arg name="bar_y0" default="0.0"/> <!-- [m] -->
+  <arg name="bar_z0" default="0.2"/> <!-- [m] -->
   
   <!-- Cable and payload characteristics -->
-  <arg name="cable_length" default="$(arg cable_length)"/>
-  <arg name="cable_radius" default="$(arg cable_radius)"/>
-  <arg name="cable_mass" default="$(arg cable_mass)"/>
-  <arg name="x_payload" default="$(arg x_payload)"/>
-  <arg name="y_payload" default="$(arg y_payload)"/>
-  <arg name="z_payload" default="$(arg z_payload)"/>
-  <arg name="payload_mass" default="$(arg payload_mass)"/>
+  <arg name="cable_length" default="1"/> <!-- [m] -->
+  <arg name="cable_radius" default="0.01"/> <!-- [m] -->
+
+  <arg name="payload_mass" default="1"/> <!-- [kg] -->
+
+  <arg name="bar_length" default="1"/> <!-- [m] -->
+  <arg name="bar_radius" default="0.02"/> <!-- [m] -->
+
+  <arg name="bar_anchor_point1" default="0.5"/> <!-- [m] -->
+  <arg name="bar_anchor_point2" default="-0.5"/> <!-- [m] -->
 
   <!-- send the robot XML to param server -->
   <param name="robot_description" command="
@@ -35,11 +40,12 @@
     namespace:=$(arg namespace)
     cable_length:=$(arg cable_length)
     cable_radius:=$(arg cable_radius)
-    cable_mass:=$(arg cable_mass)
-    x_payload:=$(arg x_payload)
-    y_payload:=$(arg y_payload)
-    z_payload:=$(arg z_payload)
-    payload_mass:=$(arg payload_mass)"
+    payload_mass:=$(arg payload_mass)
+    bar_length:=$(arg bar_length)
+    bar_radius:=$(arg bar_radius)
+    bar_anchor_point1:=$(arg bar_anchor_point1)
+    bar_anchor_point2:=$(arg bar_anchor_point2)
+    "
   />
 
   <param name="tf_prefix" type="string" value="$(arg tf_prefix)" />
@@ -48,12 +54,12 @@
   <node name="spawn_$(arg namespace)" pkg="gazebo_ros" type="spawn_model"
    args="-param robot_description
          -urdf
-         -x 0
-         -y 0
-         -z 0.2
+         -x $(arg bar_x0)
+         -y $(arg bar_y0)
+         -z $(arg bar_z0)
          -R 0
          -P 0.0
-         -Y 2.0
+         -Y 0.2
          -model $(arg namespace)"
    respawn="false" output="screen">
   </node>
