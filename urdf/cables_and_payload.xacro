@@ -44,7 +44,8 @@
       </inertial>
     </link>
 
-    <!-- Joint bewteen base_link of vehicle and joint that rotates freely around the first body axis-->
+    <!-- Joint bewteen hinge_x and hinge_y -->
+    <!-- Joint that rotates freely around the second body axis-->    
     <joint name="${uav_link}/hinge_y" type="continuous">
       <parent link="${uav_link}/load_hinge_y"/>
       <child link="${uav_link}/load_hinge_x"/>
@@ -52,8 +53,7 @@
       <axis xyz="0 1 0"/>
     </joint>
 
-    <!-- Joint bewteen hinge_x and hinge_y -->
-    <!-- Joint that rotates freely around the second body axis of previously rotated reference frame-->
+    <!-- Joint bewteen base_link of vehicle and load_hing_x -->
     <joint name="${uav_link}/hinge_x" type="continuous">
       <parent link="${uav_link}/load_hinge_x"/>
       <child link="${uav_link}"/>
@@ -66,7 +66,7 @@
   <!-- Macro for ball joints in bar -->
   <xacro:macro name="bar_ball_joint" params="namespace bar_link length">
 
-    <!-- Load of hinge_x, no need for visual or collision for hinge mechanism -->
+    <!-- Load of hinge_y: for rotation around y axis of bar -->
     <link name="${namespace}/load_hinge_y">
       <inertial>
         <origin xyz="0 0 0" rpy="0 0 0"/>
@@ -78,8 +78,9 @@
       </inertial>
     </link>
 
-    <!-- Load of hinge_y, no need for visual or collision for hinge mechanism -->
-    <link name="${namespace}/load_hinge_z">
+    <!-- Load of hinge_x: for rotation around x axis of bar -->
+    <!-- We also use this link to visualize the cable -->
+    <link name="${namespace}/load_hinge_x">
       <inertial>
         <origin xyz="0 0 0" rpy="0 0 0"/>
         <mass value="0.01"/>
@@ -96,21 +97,19 @@
       </visual>
     </link>
 
-    <!-- Joint bewteen base_link of vehicle and joint that rotates freely around the first body axis-->
-    <joint name="${namespace}/hinge_x" type="continuous">
+    <!-- Joint bewteen bar and load_hinge_y located at point in the bar -->
+    <joint name="${namespace}/bar_hinge_y" type="continuous">
       <parent link="${bar_link}"/>
       <child link="${namespace}/load_hinge_y"/>
       <origin xyz="${length} 0 0" rpy="0 0 0"/>
       <axis xyz="0 1 0"/>
     </joint>
 
-    <!-- Joint bewteen hinge_x and hinge_y -->
-    <!-- Joint that rotates freely around the second body axis of previously rotated reference frame-->
-    <joint name="${namespace}/hinge_y" type="continuous">
+    <joint name="${namespace}/bar_hinge_x" type="continuous">
       <parent link="${namespace}/load_hinge_y"/>
-      <child link="${namespace}/load_hinge_z"/>
+      <child link="${namespace}/load_hinge_x"/>
       <origin xyz="0 0 0" rpy="0 0 0"/>
-      <axis xyz="0 0 1"/>
+      <axis xyz="1 0 0"/>
     </joint>
 
   </xacro:macro>
@@ -128,7 +127,7 @@
           izz="${payload_mass * bar_length * bar_length / 12}"/>
       </inertial>
       <visual>
-        <origin xyz="0 0 0" rpy="-1.570796 0 -1.570796"/>
+        <origin xyz="0 0 0" rpy="0 1.570796 0"/>
         <geometry>
           <cylinder length="${bar_length}" radius="${bar_radius}"/>
         </geometry>
@@ -162,14 +161,14 @@
     <!-- Joint connecting bar anchor to uav -->
     <joint name="${namespace}/bar_uav_1/joint" type="fixed">
       <origin xyz="0 0 ${cable_length}" rpy="0 0 0" />
-      <parent link="${namespace}/bar_anchor_point_1/load_hinge_z" />
+      <parent link="${namespace}/bar_anchor_point_1/load_hinge_x" />
       <child link="${uav_1_link}/load_hinge_y" />
     </joint>
 
     <!-- Joint connecting bar anchor to uav -->
     <joint name="${namespace}/bar_uav_2/joint" type="fixed">
       <origin xyz="0 0 ${cable_length}" rpy="0 0 0" />
-      <parent link="${namespace}/bar_anchor_point_2/load_hinge_z" />
+      <parent link="${namespace}/bar_anchor_point_2/load_hinge_x" />
       <child link="${uav_2_link}/load_hinge_y" />
     </joint>
 
